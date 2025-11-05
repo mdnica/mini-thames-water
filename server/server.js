@@ -16,7 +16,7 @@ const app = express();
 
 // Apply middlewares
 app.use(helmet()); // Adds security HTTP headers
-app.use(cors({ origin: "http://localhost:5173", credentials: false })); // Allow local React app
+app.use(cors({ origin: "http://localhost:3000", credentials: false })); // Allow local React app
 app.use(express.json()); // Parse JSON request bodies
 
 // Serve any mock files like fake PDFs (optional)
@@ -209,10 +209,19 @@ async function init() {
     ]);
   });
 
+  // Simple route check
+  app.get("/api/health", (req, res) => {
+    res.json({
+      ok: true,
+      message: "Mini Thames Water backend is alive 💧",
+      time: new Date().toISOString(),
+    });
+  });
+
   // -------------------------------------------------------------------------
   // 🚀 Start the server
   // -------------------------------------------------------------------------
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 3001;
   app.listen(port, () => {
     console.log(`✅ API running on http://localhost:${port}`);
   });

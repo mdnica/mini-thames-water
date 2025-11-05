@@ -37,3 +37,11 @@ CREATE TABLE IF NOT EXISTS meter_readings(
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
+DROP TABLE IF EXISTS customers;
+
+CREATE TABLE customers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    address TEXT,
+    email TEXT UNIQUE
+);

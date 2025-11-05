@@ -22,3 +22,10 @@ VALUES
 INSERT INTO meter_readings (user_id, reading, submitted_at)
 VALUES 
     (1, 12345, '2025-08-01T10:00:00Z');
+
+
+INSERT INTO customers (name, address, email)
+VALUES 
+  ('Alice Johnson', 'London', 'alice@thames.com'),
+  ('Ben Smith', 'Oxford', 'ben@thames.com'),
+  ('Charlie Evans', 'Cambridge', 'charlie@thames.com')
