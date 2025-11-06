@@ -8,6 +8,7 @@ import cors from "cors"; // Allows frontend (React) to call the API
 import bcrypt from "bcrypt"; // For hashing passwords securely
 import jwt from "jsonwebtoken"; // For generating/validating tokens
 import fs from "fs"; // To read SQL files
+
 import { getDB } from "./db.js"; // Our SQLite helper
 import { requireAuth } from "./auth.js"; // Auth middleware we just made
 
@@ -28,15 +29,17 @@ app.use("/mock", express.static("./server/mock"));
 async function init() {
   const db = await getDB();
 
-  // 1️⃣ Run the SQL schema file to create tables (if not created yet)
-  await db.exec(fs.readFileSync("./schema.sql", "utf8"));
-
-  // If you run "node server.js seed", populate demo data from seed.sql
+  // If you run "node server.js seed", create tables and then populate demo data
   if (process.argv[2] === "seed") {
-    await db.exec(fs.readFileSync("./seed.sql", "utf8"));
+    console.log("🌱 Seeding database...");
+    await db.exec(fs.readFileSync("./schema.sql", "utf8")); // create tables first
+    await db.exec(fs.readFileSync("./seed.sql", "utf8")); // then insert data
     console.log("✅ Database seeded successfully!");
     console.log("Demo login: demo@customer.test / Demo123!");
-    process.exit(0); // Exit after seeding
+    process.exit(0);
+  } else {
+    // Only create tables (if not seeding)
+    await db.exec(fs.readFileSync("./schema.sql", "utf8"));
   }
 
   // -------------------------------------------------------------------------
@@ -216,6 +219,27 @@ async function init() {
       message: "Mini Thames Water backend is alive 💧",
       time: new Date().toISOString(),
     });
+  });
+
+  // temporary debbuging route
+  app.get("/api/debug-tables", async (req, res) => {
+    const db = await getDB();
+    const tables = await db.all(
+      "SELECT name FROM sqlite_master WHERE type='table'"
+    );
+    res.json(tables);
+  });
+
+  // /api/customers route
+  app.get("/api/customers", async (req, res) => {
+    try {
+      const db = await getDB();
+      const customers = await db.all("SELECT * FROM customers");
+      res.json(customers);
+    } catch (err) {
+      console.error("Error fetching customers:", err);
+      res.status(500).json({ error: "Failed to load customers" });
+    }
   });
 
   // -------------------------------------------------------------------------

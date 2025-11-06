@@ -25,7 +25,7 @@ VALUES
 
 
 INSERT INTO customers (name, address, email)
-VALUES 
-  ('Alice Johnson', 'London', 'alice@thames.com'),
-  ('Ben Smith', 'Oxford', 'ben@thames.com'),
-  ('Charlie Evans', 'Cambridge', 'charlie@thames.com')
+VALUES
+('Alice Johnson', 'London', 'alice.johnson@thames.com'),
+('Ben Smith', 'Oxford', 'ben.smith@thames.com'),
+('Charlie Evans', 'Cambridge', 'charlie.evans@thames.com');
